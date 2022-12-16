@@ -8,6 +8,12 @@
     {
       "files": "*.{cmp,page,component}",
       "options": { "parser": "html" }
+    },
+    {
+      "files": ["*.cls", "*.trigger"],
+      "options": {
+        "useTabs": true
+      }
     }
   ]
 }

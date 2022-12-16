@@ -6,9 +6,14 @@ private class BusinessLogicTest {
 			return Test.createStub(RecordSelector.class, this);
 		}
 
-		public Object handleMethodCall(Object stubbedObject, String stubbedMethodName, 
-			Type returnType, List<Type> listOfParamTypes, List<String> listOfParamNames, 
-			List<Object> listOfArgs) {
+		public Object handleMethodCall(
+			Object stubbedObject,
+			String stubbedMethodName,
+			Type returnType,
+			List<Type> listOfParamTypes,
+			List<String> listOfParamNames,
+			List<Object> listOfArgs
+		) {
 			if (stubbedMethodName == 'query') {
 				return this.records;
 			}
@@ -26,10 +31,15 @@ private class BusinessLogicTest {
 		public Object createStub() {
 			return Test.createStub(RecordSelectorFactory.class, this);
 		}
-		
-		public Object handleMethodCall(Object stubbedObject, String stubbedMethodName, 
-			Type returnType, List<Type> listOfParamTypes, List<String> listOfParamNames, 
-			List<Object> listOfArgs) {
+
+		public Object handleMethodCall(
+			Object stubbedObject,
+			String stubbedMethodName,
+			Type returnType,
+			List<Type> listOfParamTypes,
+			List<String> listOfParamNames,
+			List<Object> listOfArgs
+		) {
 			if (stubbedMethodName == 'newRecordSelector') {
 				return this.selectors.remove(0);
 			}
@@ -39,28 +49,35 @@ private class BusinessLogicTest {
 		public void addQueryResult(sObject[] records) {
 			RecordSelectorStubProvider provider = new RecordSelectorStubProvider();
 			provider.setQueryResult(records);
-			this.selectors.add((RecordSelector)provider.createStub());
+			this.selectors.add((RecordSelector) provider.createStub());
 		}
 	}
 
 	@IsTest
 	static void converLead() {
 		Lead testLead = new Lead(
-			LastName='山田', FirstName='太郎', Title='部長', Phone='03-1234-5678',
-			Company='株式会社 山田商会', Country='JP', PostalCode='100-2222',
-			State='東京', City='中央区', Street='築地１丁目１−１'
+			LastName = '山田',
+			FirstName = '太郎',
+			Title = '部長',
+			Phone = '03-1234-5678',
+			Company = '株式会社 山田商会',
+			Country = 'JP',
+			PostalCode = '100-2222',
+			State = '東京',
+			City = '中央区',
+			Street = '築地１丁目１−１'
 		);
 		RecordSelectorFactoryStubProvider provider = new RecordSelectorFactoryStubProvider();
-		provider.addQueryResult(new List<Lead> {
-			testLead
-		});
+		provider.addQueryResult(new List<Lead>{ testLead });
 		// ビジネスロジック内で複数SOQLを実行する場合の例
 		// provider.addQueryResult(new List<Account> {
 		//     new Account(Name='Test1')
 		// });
 
 		Test.startTest();
-		BusinessLogic logic = new BusinessLogic((RecordSelectorFactory) provider.createStub());
+		BusinessLogic logic = new BusinessLogic(
+			(RecordSelectorFactory) provider.createStub()
+		);
 		Account acc = logic.converLead(Id.valueOf('0066D000006uNQWQA2'));
 		Test.stopTest();
 
@@ -74,7 +91,8 @@ private class BusinessLogicTest {
 
 		Contact con = [
 			SELECT Id, LastName, FirstName, Title, Phone
-			FROM Contact WHERE AccountId = :acc.Id
+			FROM Contact
+			WHERE AccountId = :acc.Id
 		];
 		Assert.areEqual(con.LastName, testLead.LastName);
 		Assert.areEqual(con.FirstName, testLead.FirstName);
@@ -85,9 +103,16 @@ private class BusinessLogicTest {
 	@isTest
 	static void getLead() {
 		Lead testLead = new Lead(
-			LastName='山田', FirstName='太郎', Title='部長', Phone='03-1234-5678',
-			Company='株式会社 山田商会', Country='JP', PostalCode='100-2222',
-			State='東京', City='中央区', Street='築地１丁目１−１'
+			LastName = '山田',
+			FirstName = '太郎',
+			Title = '部長',
+			Phone = '03-1234-5678',
+			Company = '株式会社 山田商会',
+			Country = 'JP',
+			PostalCode = '100-2222',
+			State = '東京',
+			City = '中央区',
+			Street = '築地１丁目１−１'
 		);
 		insert testLead;
 
