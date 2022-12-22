@@ -1,8 +1,19 @@
 public with sharing class SObjectUnitOfWork {
-	private Map<sObjectType, List<SObject>> newListByType = new Map<sObjectType, List<SObject>>();
-	private Map<sObjectType, Map<Id, SObject>> dirtyMapByType = new Map<sObjectType, Map<Id, SObject>>();
+	private List<SObjectType> sObjectTypes;
+	private Map<sObjectType, List<SObject>> newListByType;
+	private Map<sObjectType, Map<Id, SObject>> dirtyMapByType;
 
 	public SObjectUnitOfWork(List<SObjectType> sObjectTypes) {
+		this.sObjectTypes = sObjectTypes;
+		beginWork();
+	}
+
+	/**
+	 * 作業を開始する
+	 */
+	public void beginWork() {
+		this.newListByType = new Map<sObjectType, List<SObject>>();
+		this.dirtyMapByType = new Map<sObjectType, Map<Id, SObject>>();
 		for (SObjectType sObjectType : sObjectTypes) {
 			newListByType.put(sObjectType, new List<SObject>());
 			dirtyMapByType.put(sObjectType, new Map<Id, SObject>());
@@ -50,6 +61,19 @@ public with sharing class SObjectUnitOfWork {
 	 * DMLを実行する
 	 */
 	public void commitWork() {
-		// TODO:
+		this.insertDmlByType();
+		this.updateDmlByType();
+	}
+
+	private void insertDmlByType() {
+		for (SObjectType sObjectType : newListByType.keySet()) {
+			insert this.newListByType.get(sObjectType);
+		}
+	}
+
+	private void updateDmlByType() {
+		for (SObjectType sObjectType : dirtyMapByType.keySet()) {
+			update this.dirtyMapByType.get(sObjectType).values();
+		}
 	}
 }

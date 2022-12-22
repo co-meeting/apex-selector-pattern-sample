@@ -12,6 +12,7 @@ public with sharing class LeadService {
 
 	/**
 	 * リードの取引を開始
+	 * NOTE: UnitOfWorkはリレーションに対応していないので直にinsertしている
 	 *
 	 * @param Id リードのレコードId
 	 * @return 作成した取引先レコード
