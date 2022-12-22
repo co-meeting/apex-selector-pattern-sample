@@ -1,5 +1,5 @@
-public with sharing class RecordSelector {
-	public class RecordSelectorException extends Exception {
+public with sharing class SObjectSelector {
+	public class SObjectSelectorException extends Exception {
 	}
 	private static final Integer MAX_OFFSET = 2000;
 	private Boolean isSecurityEnforced = false;
@@ -7,14 +7,14 @@ public with sharing class RecordSelector {
 
 	private String sObjectName;
 	private Set<String> selectExpresions = new Set<String>();
-	private RecordSelector[] subQueries = new List<RecordSelector>();
+	private SObjectSelector[] subQueries = new List<SObjectSelector>();
 	private String[] conditions = new List<String>();
 	private String[] orders = new List<String>();
 	private String[] groupBys = new List<String>();
 	private Integer limitCount;
 	private Integer offset;
 	private Boolean isAllRows = false;
-	public RecordSelector(String sObjectName) {
+	public SObjectSelector(String sObjectName) {
 		this.sObjectName = sObjectName;
 	}
 
@@ -45,7 +45,7 @@ public with sharing class RecordSelector {
 		}
 	}
 
-	public void addSubQuery(RecordSelector subQuery) {
+	public void addSubQuery(SObjectSelector subQuery) {
 		this.subQueries.add(subQuery);
 	}
 
@@ -67,7 +67,7 @@ public with sharing class RecordSelector {
 
 	public void setOffset(Integer offset) {
 		if (offset > MAX_OFFSET) {
-			throw new RecordSelectorException('offsetは2000が最大です');
+			throw new SObjectSelectorException('offsetは2000が最大です');
 		}
 		this.offset = offset;
 	}
@@ -76,7 +76,7 @@ public with sharing class RecordSelector {
 		String query =
 			'SELECT ' + String.join(new List<String>(this.selectExpresions), ',');
 		if (this.subQueries.size() > 0) {
-			for (RecordSelector subQuery : this.subQueries) {
+			for (SObjectSelector subQuery : this.subQueries) {
 				query += ', (' + subQuery.toSoql() + ')';
 			}
 		}

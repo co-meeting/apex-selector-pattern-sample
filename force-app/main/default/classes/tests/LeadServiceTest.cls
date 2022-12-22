@@ -1,5 +1,5 @@
 @IsTest
-private class BusinessLogicTest {
+private class LeadServiceTest {
 	@IsTest
 	static void converLead() {
 		Lead testLead = new Lead(
@@ -14,7 +14,7 @@ private class BusinessLogicTest {
 			City = '中央区',
 			Street = '築地１丁目１−１'
 		);
-		RecordSelectorFactoryStubProvider provider = new RecordSelectorFactoryStubProvider();
+		SObjectSelectorFactoryStubProvider provider = new SObjectSelectorFactoryStubProvider();
 		provider.addQueryResult(new List<Lead>{ testLead });
 		// ビジネスロジック内で複数SOQLを実行する場合の例
 		// provider.addQueryResult(new List<Account> {
@@ -22,10 +22,10 @@ private class BusinessLogicTest {
 		// });
 
 		Test.startTest();
-		BusinessLogic logic = new BusinessLogic(
-			(RecordSelectorFactory) provider.createStub()
+		LeadService service = new LeadService(
+			(SObjectSelectorFactory) provider.createStub()
 		);
-		Account acc = logic.converLead(Id.valueOf('0066D000006uNQWQA2'));
+		Account acc = service.converLead(Id.valueOf('0066D000006uNQWQA2'));
 		Test.stopTest();
 
 		Assert.areEqual(acc.Name, testLead.Company);
@@ -64,7 +64,7 @@ private class BusinessLogicTest {
 		insert testLead;
 
 		Test.startTest();
-		Lead result = new BusinessLogic().getLead(testLead.Id);
+		Lead result = new LeadService().getLead(testLead.Id);
 		Test.stopTest();
 
 		Assert.areEqual(testLead.LastName, result.LastName);

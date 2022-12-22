@@ -2,6 +2,7 @@
   "orgName": "hrendoh company",
   "edition": "Developer",
   "features": ["EnableSetPasswordInApi"],
+  "hasSampleData": true,
   "settings": {
     "lightningExperienceSettings": {
       "enableS1DesktopEnabled": true

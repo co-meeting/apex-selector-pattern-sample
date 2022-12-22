@@ -1,12 +1,12 @@
-public with sharing class BusinessLogic {
+public with sharing class LeadService {
 	@TestVisible
-	private RecordSelectorFactory selectorFactory;
-	public BusinessLogic() {
-		this.selectorFactory = new RecordSelectorFactory();
+	private SObjectSelectorFactory selectorFactory;
+	public LeadService() {
+		this.selectorFactory = new SObjectSelectorFactory();
 	}
 
 	@TestVisible
-	public BusinessLogic(RecordSelectorFactory selectorFactory) {
+	public LeadService(SObjectSelectorFactory selectorFactory) {
 		this.selectorFactory = selectorFactory;
 	}
 
@@ -51,7 +51,7 @@ public with sharing class BusinessLogic {
 	 */
 	@TestVisible
 	private Lead getLead(Id leadId) {
-		RecordSelector selector = this.selectorFactory.newRecordSelector('Lead');
+		SObjectSelector selector = this.selectorFactory.newSObjectSelector('Lead');
 		selector.addSelectField('Id');
 		selector.addSelectField('LastName');
 		selector.addSelectField('FirstName');
